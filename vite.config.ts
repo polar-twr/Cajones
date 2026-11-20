@@ -82,6 +82,31 @@ export default defineConfig(() => {
           type: 'module',
         },
       }),
+      {
+        name: 'safe-pwa-dev-no-hmr-send',
+        apply: 'serve',
+        enforce: 'post',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url?.startsWith('/@vite-plugin-pwa/pwa-entry-point-loaded')) {
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/javascript');
+              res.end('export default function registerDevSW() {}');
+              return;
+            }
+            next();
+          });
+        },
+        transformIndexHtml: {
+          order: 'post',
+          handler(html: string) {
+            return html.replace(
+              /<script id="vite-plugin-pwa:register-dev-sw"[^>]*>[\s\S]*?<\/script>/g,
+              ''
+            );
+          },
+        },
+      },
       // Copies src/assets into dist/ so root-relative URLs like
       // "/src/assets/images/..." (e.g. generate_image output) still resolve
       // in production builds. Do not remove.

@@ -9,7 +9,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Flashcard, TopicBox } from '../types/leitner';
-import { formatIntervalLabel, isCardDue } from '../utils/leitner';
+import { formatIntervalLabel, getDrawerColorTheme, isCardDue } from '../utils/leitner';
 
 interface TopicDetailProps {
   topic: TopicBox;
@@ -205,13 +205,14 @@ export const TopicDetail: React.FC<TopicDetailProps> = ({
             const drawerDue = drawerCards.filter((c) => isCardDue(c, todayStr)).length;
             const canDelete = topic.drawers.length > 1;
             const isConfirming = confirmDeleteDrawerId === drawer.id;
+            const colorTheme = getDrawerColorTheme(idx);
 
             return (
-              <div key={drawer.id} className="px-4 py-3.5">
+              <div key={drawer.id} className={`px-4 py-3.5 transition-colors ${colorTheme.rowBg}`}>
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-[15px] font-semibold text-zinc-900 dark:text-zinc-100">
+                      <span className={`text-[15px] font-semibold ${colorTheme.labelText}`}>
                         Cajón {idx + 1}
                       </span>
                       <span className="text-xs text-zinc-500 dark:text-zinc-400">

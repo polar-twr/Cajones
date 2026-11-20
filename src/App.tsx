@@ -19,6 +19,7 @@ import {
   isCardDue,
   loadAppData,
   saveAppData,
+  shuffleItems,
 } from './utils/leitner';
 
 interface ActiveStudy {
@@ -243,16 +244,11 @@ export default function App() {
     const topic = data.topics.find((t) => t.id === topicId);
     if (!topic) return;
 
-    const drawerOrder = new Map(topic.drawers.map((d, idx) => [d.id, idx]));
     const topicCards = data.cards.filter((c) => c.topicId === topicId);
-    const queue = (
-      practiceAll
-        ? [...topicCards]
-        : topicCards.filter((c) => isCardDue(c, todayStr))
-    ).sort(
-      (a, b) =>
-        (drawerOrder.get(a.drawerId) ?? 0) - (drawerOrder.get(b.drawerId) ?? 0)
-    );
+    const candidates = practiceAll
+      ? topicCards
+      : topicCards.filter((c) => isCardDue(c, todayStr));
+    const queue = shuffleItems(candidates);
 
     if (queue.length === 0) return;
 

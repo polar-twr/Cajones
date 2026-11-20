@@ -16,6 +16,65 @@ export function formatIntervalLabel(intervalDays: number): string {
   return intervalDays === 1 ? 'Todos los días' : `Cada ${intervalDays} días`;
 }
 
+export interface DrawerColorTheme {
+  rowBg: string;
+  cardSurface: string;
+  labelText: string;
+  progressBar: string;
+}
+
+const DRAWER_COLOR_THEMES: DrawerColorTheme[] = [
+  {
+    // Cajón 1: Gris
+    rowBg: 'bg-slate-100/70 dark:bg-slate-800/35',
+    cardSurface: 'bg-slate-50/90 border-slate-300/80 dark:bg-[#171C23] dark:border-slate-700/70',
+    labelText: 'text-slate-700 dark:text-slate-300',
+    progressBar: 'bg-slate-500 dark:bg-slate-400',
+  },
+  {
+    // Cajón 2: Azul
+    rowBg: 'bg-[#EFF6FF]/85 dark:bg-[#172554]/35',
+    cardSurface: 'bg-[#F5F9FF] border-[#BFDBFE] dark:bg-[#121B2B] dark:border-[#1E3A8A]/70',
+    labelText: 'text-[#1E40AF] dark:text-[#93C5FD]',
+    progressBar: 'bg-[#3B82F6] dark:bg-[#60A5FA]',
+  },
+  {
+    // Cajón 3: Verde
+    rowBg: 'bg-[#F0FDF4]/85 dark:bg-[#052E16]/35',
+    cardSurface: 'bg-[#F5FCF7] border-[#BBF7D0] dark:bg-[#111E17] dark:border-[#166534]/70',
+    labelText: 'text-[#166534] dark:text-[#86EFAC]',
+    progressBar: 'bg-[#16A34A] dark:bg-[#4ADE80]',
+  },
+  {
+    // Cajón 4: Salmón
+    rowBg: 'bg-[#FFF1EE]/90 dark:bg-[#3B1813]/40',
+    cardSurface: 'bg-[#FFF6F4] border-[#FBC4B8] dark:bg-[#231513] dark:border-[#7A3428]/75',
+    labelText: 'text-[#A34230] dark:text-[#F7A99A]',
+    progressBar: 'bg-[#E07A67] dark:bg-[#EB8A77]',
+  },
+  {
+    // Cajón 5: Granate
+    rowBg: 'bg-[#FDF2F4]/90 dark:bg-[#3A121D]/40',
+    cardSurface: 'bg-[#FDF7F8] border-[#E2B4BE] dark:bg-[#221217] dark:border-[#6E2236]/75',
+    labelText: 'text-[#7B1E36] dark:text-[#E89EB0]',
+    progressBar: 'bg-[#9E2A47] dark:bg-[#C44D69]',
+  },
+];
+
+export function getDrawerColorTheme(index: number): DrawerColorTheme {
+  const safeIndex = ((index % DRAWER_COLOR_THEMES.length) + DRAWER_COLOR_THEMES.length) % DRAWER_COLOR_THEMES.length;
+  return DRAWER_COLOR_THEMES[safeIndex];
+}
+
+export function shuffleItems<T>(items: T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export function createId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();

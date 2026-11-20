@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Upload, X } from 'lucide-react';
+import { Download, Upload, X } from 'lucide-react';
 import { parseTxtContent } from '../utils/leitner';
 
 interface ImportTxtModalProps {
@@ -101,6 +101,24 @@ export const ImportTxtModal: React.FC<ImportTxtModalProps> = ({
               <br />
               Símbolo del oro / Au
             </p>
+            <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1.5">
+              <a
+                href="/ingles-b2-300.txt"
+                download="ingles-b2-300.txt"
+                className="inline-flex items-center gap-1.5 font-medium text-blue-600 hover:underline dark:text-blue-400"
+              >
+                <Download className="h-3.5 w-3.5" />
+                <span>Descargar Inglés B2 completo (699 fichas .txt)</span>
+              </a>
+              <a
+                href="/ingles-b2.txt"
+                download="ingles-b2.txt"
+                className="inline-flex items-center gap-1.5 text-zinc-500 hover:text-zinc-800 hover:underline dark:text-zinc-400 dark:hover:text-zinc-200"
+              >
+                <Download className="h-3.5 w-3.5" />
+                <span>Pack corto (60 fichas .txt)</span>
+              </a>
+            </div>
           </div>
 
           <div>

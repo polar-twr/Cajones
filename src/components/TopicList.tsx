@@ -84,6 +84,7 @@ export const TopicList: React.FC<TopicListProps> = ({
         {topics.map((topic) => {
           const topicCards = cards.filter((c) => c.topicId === topic.id);
           const dueCount = topicCards.filter((c) => isCardDue(c, todayStr)).length;
+          const pendingRatio = topicCards.length > 0 ? dueCount / topicCards.length : 0;
           const isSelected = selectedTopicId === topic.id;
 
           return (
@@ -104,7 +105,21 @@ export const TopicList: React.FC<TopicListProps> = ({
                   {topic.name}
                 </span>
 
-                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                <div
+                  className="mt-1.5 h-1.5 w-full max-w-[220px] overflow-hidden rounded-full bg-zinc-200/80 dark:bg-zinc-800"
+                  role="progressbar"
+                  aria-valuenow={dueCount}
+                  aria-valuemin={0}
+                  aria-valuemax={topicCards.length}
+                  aria-label={`${dueCount} pendientes hoy de ${topicCards.length} tarjetas`}
+                >
+                  <div
+                    className="h-full w-full origin-left rounded-full bg-blue-600 transition-transform duration-200 dark:bg-blue-500"
+                    style={{ transform: `scaleX(${pendingRatio})` }}
+                  />
+                </div>
+
+                <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                   <span
                     className={`tabular-nums font-medium ${
                       dueCount > 0

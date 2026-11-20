@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Check, Eye, RotateCcw } from 'lucide-react';
 import { DrawerConfig, Flashcard } from '../types/leitner';
-import { formatIntervalLabel } from '../utils/leitner';
+import { formatIntervalLabel, getDrawerColorTheme } from '../utils/leitner';
 
 interface StudySessionProps {
   topicName: string;
@@ -122,6 +122,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
   const nextDrawer = drawers[Math.min(drawers.length - 1, resolvedIdx + 1)] ?? currentDrawer;
   const isLastDrawer = resolvedIdx >= drawers.length - 1;
   const progressPercent = Math.round(((currentIndex + 1) / total) * 100);
+  const colorTheme = getDrawerColorTheme(resolvedIdx);
 
   return (
     <div
@@ -143,7 +144,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
             <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
               {topicName}
             </p>
-            <p className="font-mono-tabular text-xs text-zinc-500 dark:text-zinc-400">
+            <p className={`font-mono-tabular text-xs font-medium ${colorTheme.labelText}`}>
               {currentIndex + 1} / {total} · Cajón {resolvedIdx + 1} ({currentDrawer.intervalDays}d)
               {isPracticeMode ? ' · Repaso libre' : ''}
             </p>
@@ -156,7 +157,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
       {/* Hairline progress bar */}
       <div className="h-0.5 w-full bg-zinc-200 dark:bg-zinc-800">
         <div
-          className="h-full bg-blue-600 transition-transform duration-200 ease-out origin-left dark:bg-blue-500"
+          className={`h-full transition-transform duration-200 ease-out origin-left ${colorTheme.progressBar}`}
           style={{ transform: `scaleX(${progressPercent / 100})` }}
         />
       </div>
@@ -175,12 +176,12 @@ export const StudySession: React.FC<StudySessionProps> = ({
               setRevealed(true);
             }
           }}
-          className={`flex min-h-[260px] flex-col justify-center rounded-3xl border border-zinc-200 bg-white p-6 transition-opacity duration-150 dark:border-zinc-800 dark:bg-[#16191F] ${
+          className={`flex min-h-[260px] flex-col justify-center rounded-3xl border p-6 transition-colors duration-150 ${colorTheme.cardSurface} ${
             contained ? '' : 'sm:min-h-[340px] sm:p-10'
           } ${!revealed ? 'cursor-pointer active:scale-[0.995]' : ''}`}
         >
           <div>
-            <p className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
+            <p className={`text-xs font-semibold ${colorTheme.labelText}`}>
               Pregunta · Cajón {resolvedIdx + 1} ({formatIntervalLabel(currentDrawer.intervalDays).toLowerCase()})
             </p>
             <p
